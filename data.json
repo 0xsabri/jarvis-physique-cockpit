@@ -1,0 +1,93 @@
+[
+  {
+    "date": "2026-08-23",
+    "day": "Sunday",
+    "type": null,
+    "calories": null,
+    "protein": null,
+    "carbs": null,
+    "fat": null,
+    "tdee": null,
+    "steps": null,
+    "gym": null,
+    "notes": "PARTIAL: family meal \u2248950 kcal: 2.5 stuffed batbouts + 0.6 plain msemen + small cake square. Other foods not recovered yet."
+  },
+  {
+    "date": "2026-08-24",
+    "day": "Monday",
+    "type": "Training",
+    "calories": 1705,
+    "protein": 165,
+    "carbs": 167,
+    "fat": 33,
+    "tdee": null,
+    "steps": null,
+    "gym": "Planned",
+    "notes": "Oatmeal + CoR + Coop 500ml protein drink + 250g raw chicken + 250g vegetables + 200g cooked rice."
+  },
+  {
+    "date": "2026-08-25",
+    "day": "Tuesday",
+    "type": "Training",
+    "calories": 1550,
+    "protein": 132,
+    "carbs": 185,
+    "fat": 26,
+    "tdee": 2735,
+    "steps": null,
+    "gym": "Yes",
+    "notes": "Final Apple Fitness: 2,735 kcal total expenditure; 1,034 active kcal; 133 exercise min. Intake estimate ~1,550 kcal. Gym yes. Final steps not provided."
+  },
+  {
+    "date": "2026-08-26",
+    "day": "Wednesday",
+    "type": "Training",
+    "calories": 1730,
+    "protein": 137,
+    "carbs": 168,
+    "fat": 44,
+    "tdee": 2656,
+    "steps": null,
+    "gym": "Yes",
+    "notes": "SEALED. Intake \u22481,730 kcal. Gym yes. Apple Fitness total expenditure 2,656 kcal; active \u2248930 kcal. Dinner: 170g chicken + 180g McCain fries + 250g vegetables. Steps not provided."
+  },
+  {
+    "date": "2026-08-27",
+    "day": "Thursday",
+    "type": "Training",
+    "calories": 1730,
+    "protein": 118,
+    "carbs": 199,
+    "fat": 47,
+    "tdee": 3060,
+    "steps": null,
+    "gym": "Yes",
+    "notes": "SEALED. TDEE 3,060 kcal. Intake \u22481,730 kcal. Gym yes + bicycle/cardio. Tasty Crousty estimated \u2248900 kcal after sharing some. Protein \u2248110\u2013125g; restaurant meal makes exact carbs/fat uncertain."
+  },
+  {
+    "date": "2026-08-28",
+    "day": "Friday",
+    "type": "Rest",
+    "calories": 1550,
+    "protein": 165,
+    "carbs": 125,
+    "fat": 41,
+    "tdee": 2100,
+    "steps": null,
+    "gym": "No",
+    "notes": "SEALED. Intake \u22481,550 kcal / 165g protein / 125g carbs / 41g fat. TDEE 2,100 kcal. Foods included oatmeal, 3 protein bars, boiled egg, Monster, 250g beef liver + canned peas/carrots, 50g no-added-sugar strawberry jelly, and a glass of coconut water."
+  },
+  {
+    "date": "2026-08-29",
+    "day": "Saturday",
+    "type": "Training",
+    "calories": 1960,
+    "protein": 161,
+    "carbs": 246,
+    "fat": 41,
+    "tdee": 2450,
+    "steps": null,
+    "gym": "Yes",
+    "notes": "SEALED. Intake \u22481,960 kcal / 161P / 246C / 41F. TDEE 2,450; deficit \u2248490. Gym yes + bike. 3 protein bars, sugar-free jam, Rice Krispies + milk, dinner: 200g chicken, 200g air-fryer fries, 250g canned peas/carrots."
+  }
+]

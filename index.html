@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JARVIS // Physique Cockpit</title>
+<style>
+:root{--bg:#05080b;--panel:#0a1117;--line:#183544;--cyan:#58d9ff;--text:#dff8ff;--muted:#6f95a4;--good:#7dffc8;--warn:#ffd77a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#102a38 0,#05080b 42%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(88,217,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(88,217,255,.025) 1px,transparent 1px);background-size:32px 32px}
+.wrap{max-width:1180px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:18px}
+.kicker{font-size:11px;letter-spacing:.3em;color:var(--cyan)}h1{font-size:clamp(26px,5vw,52px);margin:5px 0;font-weight:650;letter-spacing:-.04em}.status{color:var(--good);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{background:linear-gradient(180deg,rgba(12,24,32,.94),rgba(7,14,19,.94));border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 0 30px rgba(88,217,255,.035)}
+.metric{grid-column:span 3}.wide{grid-column:span 8}.side{grid-column:span 4}.full{grid-column:1/-1}.label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.16em}.big{font-size:32px;margin-top:8px}.sub{font-size:12px;color:var(--muted);margin-top:5px}.good{color:var(--good)}.warn{color:var(--warn)}
+.bar{height:6px;background:#0d202a;border-radius:20px;margin-top:14px;overflow:hidden}.bar i{display:block;height:100%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+canvas{width:100%;height:230px}.days{display:grid;gap:8px;margin-top:12px}.day{display:grid;grid-template-columns:90px 1fr repeat(4,70px);gap:8px;padding:10px 0;border-bottom:1px solid #102832;font-size:12px}.day span:not(:first-child){text-align:right}.score{font-size:58px;line-height:1;color:var(--cyan)}.pill{display:inline-block;border:1px solid #214b5d;border-radius:999px;padding:5px 9px;margin:3px 3px 0 0;color:#9edff1;font-size:11px}
+@media(max-width:800px){.metric,.wide,.side{grid-column:1/-1}.metric{grid-column:span 6}.day{grid-template-columns:75px 1fr 55px 55px}.day .hide{display:none}}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div><div class="kicker">PERSONAL PHYSIQUE INTELLIGENCE</div><h1>JARVIS // COCKPIT</h1><div class="sub">Cut → controlled calorie ascent → lean mass phase</div></div><div class="status">● SYSTEM ONLINE</div></div>
+<div class="grid">
+<div class="card metric"><div class="label">Avg intake</div><div class="big" id="avgCal">—</div><div class="sub">kcal / tracked day</div></div>
+<div class="card metric"><div class="label">Avg TDEE</div><div class="big" id="avgTdee">—</div><div class="sub">completed expenditure days</div></div>
+<div class="card metric"><div class="label">Tracked deficit</div><div class="big" id="deficit">—</div><div class="sub">kcal total</div></div>
+<div class="card metric"><div class="label">Gym compliance</div><div class="big" id="gym">—</div><div class="sub">logged training days</div></div>
+<div class="card wide"><div class="label">Energy telemetry</div><canvas id="chart" width="800" height="230"></canvas></div>
+<div class="card side"><div class="label">JARVIS assessment</div><div class="score" id="score">—</div><div class="sub" id="verdict"></div><div id="pills" style="margin-top:14px"></div></div>
+<div class="card full"><div class="label">Daily flight log</div><div class="days" id="days"></div></div>
+</div></div>
+<script>
+fetch('data.json').then(r=>r.json()).then(data=>{
+ const valid=data.filter(d=>d.calories), td=data.filter(d=>d.tdee&&d.calories);
+ const avg=a=>Math.round(a.reduce((x,y)=>x+y,0)/a.length);
+ document.querySelector('#avgCal').textContent=avg(valid.map(d=>d.calories));
+ document.querySelector('#avgTdee').textContent=avg(td.map(d=>d.tdee));
+ const def=td.reduce((s,d)=>s+(d.tdee-d.calories),0); document.querySelector('#deficit').textContent=def.toLocaleString();
+ const gyms=data.filter(d=>String(d.gym).toLowerCase()==='yes').length; document.querySelector('#gym').textContent=gyms+' sessions';
+ let score=85; if(avg(valid.map(d=>d.protein||0))>=130)score+=5;if(td.length&&avg(td.map(d=>d.tdee-d.calories))>800)score-=8;
+ document.querySelector('#score').textContent=Math.max(0,Math.min(100,score));
+ document.querySelector('#verdict').textContent=avg(td.map(d=>d.tdee-d.calories))>800?'Excellent consistency. Deficit has been very aggressive; recovery and muscle retention are now the priority.':'Strong adherence. Keep performance high and increase calories gradually.';
+ document.querySelector('#pills').innerHTML='<span class="pill">Protein protected</span><span class="pill">Training consistent</span><span class="pill">Watch recovery</span>';
+ document.querySelector('#days').innerHTML=data.filter(d=>d.calories).slice().reverse().map(d=>`<div class="day"><b>${d.day.slice(0,3)} ${d.date.slice(8)}</b><span>${d.type||'—'}</span><span>${d.calories} kcal</span><span>${d.protein||'—'}P</span><span class="hide">${d.tdee||'—'} TDEE</span><span class="hide ${d.tdee&&d.calories?'good':''}">${d.tdee&&d.calories?'-'+(d.tdee-d.calories):'—'}</span></div>`).join('');
+ draw(data.filter(d=>d.calories));
+});
+function draw(data){const c=document.querySelector('#chart'),x=c.getContext('2d'),W=c.width,H=c.height,p=35,max=Math.max(...data.flatMap(d=>[d.calories||0,d.tdee||0]),3000);x.clearRect(0,0,W,H);x.strokeStyle='#173747';x.fillStyle='#6f95a4';x.font='11px system-ui';
+ for(let i=0;i<4;i++){let y=p+(H-2*p)*i/3;x.beginPath();x.moveTo(p,y);x.lineTo(W-p,y);x.stroke()}
+ const plot=(key,col)=>{x.strokeStyle=col;x.lineWidth=3;x.beginPath();data.forEach((d,i)=>{if(!d[key])return;let xx=p+i*(W-2*p)/Math.max(1,data.length-1),yy=H-p-d[key]/max*(H-2*p);i?x.lineTo(xx,yy):x.moveTo(xx,yy)});x.stroke()};
+ plot('tdee','#7dffc8');plot('calories','#58d9ff');data.forEach((d,i)=>{x.fillStyle='#6f95a4';x.fillText(d.day.slice(0,3),p+i*(W-2*p)/Math.max(1,data.length-1)-10,H-10)});
+}
+</script></body></html>
